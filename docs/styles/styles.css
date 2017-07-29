@@ -34,3 +34,10 @@
     width: 450px;
     height: 170px;
 }
+
+.total-share-block {
+    position: absolute ! important;
+    float: right;
+    top: 20px;
+    right: 260px;
+}

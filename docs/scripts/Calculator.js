@@ -77,17 +77,17 @@ class Calculator {
             }
         }
 
-        this.total["shares"] = 10000.0;
+        this.total["shares"] = this.getFloat($('#total-shares').val(), 10000);
 
         return this.total;
     }
 
-    getFloat(n) {
+    getFloat(n, _def = 0.0) {
 
         n = parseFloat(n);
 
         if (isNaN(n))
-            n = 0.0;
+            n = _def;
 
         return n;
     }

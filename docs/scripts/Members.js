@@ -1,6 +1,5 @@
 class Members {
-    constructor(form, putMemberBtn, selMemberBtn, calculateBtn, saveToDBBtn, tableMembers) {
-        this.form = form;
+    constructor(putMemberBtn, selMemberBtn, calculateBtn, saveToDBBtn, tableMembers) {
         this.putMemberBtn = putMemberBtn;
         this.selMemberBtn = selMemberBtn;
         this.calculateBtn = calculateBtn;
@@ -13,23 +12,6 @@ class Members {
     init() {
         this.members = [];
         this.selectedMemberIndex = -1;
-
-        this.orderMemberData = {
-            name: true,
-            fshare: true,
-            membercash: true,
-            investorscash: true,
-            hourlyrate: true,
-            startdate: true,
-            vesteddate: true,
-            hours: true,
-            noncash: true,
-            value: true,
-            vshare: true,
-            tshare: true,
-            shares: true,
-            days: true
-        };
 
         this.extraMemberData = {
             noncash: "-",
@@ -76,11 +58,11 @@ class Members {
 
             // Remove selected index
             this.selectedMemberIndex = -1;
-            this.updatePutBtn();
+            render.updatePutBtn(true);
         }
 
         // Render table
-        this.render();
+        render.render(this.members);
 
         // Reset form
         newMemberForm.reset();
@@ -93,7 +75,7 @@ class Members {
 
         if(this.members[memberId]) {
             this.selectedMemberIndex = memberId;
-            this.updatePutBtn();
+            render.updatePutBtn();
             newMemberForm.setMemberData(this.members[memberId]);
         }
 
@@ -103,7 +85,7 @@ class Members {
     onCalculateMember() {
 
         calculator.calculateMembers(this.members, this.extraMemberData);
-        this.render();
+        render.render(this.members);
 
         return false;
     }
@@ -118,7 +100,7 @@ class Members {
 
             if(Array.isArray(members)) {
                 this.members = members;
-                this.render();
+                render.render(this.members);
             }
         });
     }
@@ -131,77 +113,5 @@ class Members {
                 alert('There has been an error');
         });
         return false;
-    }
-
-    updatePutBtn () {
-        if(this.selectedMemberIndex === -1)
-            this.putMemberBtn.html('Add new member');
-        else
-            this.putMemberBtn.html('Update member');
-    }
-
-    render() {
-        this.renderTable();
-        this.renderCharts();
-    }
-
-    renderTable() {
-        this.tableMembers.html(`
-            <tr>
-                <th>Name</th>
-                <th>Fix. share</th>
-                <th>M cash</th>
-                <th>I cash</th>
-                <th>$ hourly</th>
-                <th>Start</th>
-                <th>Vested</th>
-                <th>Hours</th>
-                <th>Non cash</th>
-                <th>$value</th>
-                <th>Var. share</th>
-                <th>% t. share</th>                
-                <th>#shares</th>
-                <th>Days</th>
-            </tr>
-        `);
-
-        this.renderTableHtml(this.members.concat([
-            calculator.getTotal(this.members)
-        ]));
-    }
-
-    renderTableHtml(members) {
-        for(let i in members) {
-
-            let block = "";
-            for(let j in this.orderMemberData)
-                if(this.orderMemberData[j])
-                    block += `<td>${members[i][j]}</td>`;
-
-            this.tableMembers.append(`<tr class="selectable" data-member-id=${i}>${block}</tr>`);
-        }
-    }
-
-    renderCharts() {
-
-        let pieChartData = [];
-        let barChartData = [];
-
-        console.log(this.members);
-
-        for(let i in this.members) {
-            pieChartData.push([
-                this.members[i].name,
-                this.members[i].tshare * 100.0
-            ]);
-
-            barChartData.push([
-                this.members[i].name,
-                this.members[i].value
-            ]);
-        }
-
-        charts.updateChart('pie', pieChartData);
-        charts.updateChart('bar', barChartData);
     }
 }

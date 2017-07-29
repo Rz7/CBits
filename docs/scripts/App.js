@@ -6,6 +6,11 @@ window.charts = new Charts();
 
 window.calculator = new Calculator();
 
+window.render = new Render(
+    $('#add-new-member'),
+    $('#table-members')
+);
+
 window.newMemberForm = new Form(
     $('#new-member-form'),
     $('#new-member-form').find("#name"),
@@ -19,7 +24,6 @@ window.newMemberForm = new Form(
 );
 
 window.membersManager = new Members(
-    $('#new-member-form'),
     $('#add-new-member'),
     '.selectable',
     $('#calculate'),
