@@ -23,16 +23,7 @@ class DB {
 
     updateAllData(data) {
         return promise.map(data, (element, index) => {
-            this.query(`               
-                INSERT INTO users (id) VALUES ($1) ON CONFLICT (id) DO NOTHING
-            `, [ index ]);
-
-            return this.query(`
-                INSERT INTO shares (user_id, info)
-                VALUES ($1, $2)
-                ON CONFLICT (user_id) DO UPDATE
-                    SET info = $2
-            `, [ index, element ]);
+            return this.query(`SELECT updateData($1, $2);`, [ index, element ]);
         });
     }
 
@@ -55,6 +46,14 @@ class DB {
                 user_id INT NOT NULL UNIQUE,
                 info TEXT NOT NULL
             );
+            
+            CREATE OR REPLACE FUNCTION updateData(index integer, el text) RETURNS void AS $$
+                #variable_conflict use_variable
+                BEGIN
+                    INSERT INTO users (id) VALUES (index) ON CONFLICT (id) DO NOTHING;
+                    INSERT INTO shares (user_id, info) VALUES (index, el) ON CONFLICT (user_id) DO UPDATE SET info = el;
+                END;
+            $$ LANGUAGE plpgsql;
         `;
 
         return this.query(q).then(r => debug('Connected to the DB'));
