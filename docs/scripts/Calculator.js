@@ -52,7 +52,25 @@ class Calculator {
     }
 
     getTotal(members) {
-        this.total = {};
+        this.total = {
+            name: 'Total',
+            fshare: 0.0,
+            membercash: 0.0,
+            investorscash: 0.0,
+            hourlyrate: 0.0,
+            startdate: '',
+            vesteddate: '',
+            hours: 0,
+            noncash: 0.0,
+            value: 0.0,
+            vshare: 0.0,
+            tshare: 0.0,
+            shares: 0.0,
+            days: 0
+        };
+
+        if( ! members || members.length === 0)
+            return this.total;
 
         for(let i in members) {
             for(let j in members[i]) {
@@ -63,10 +81,7 @@ class Calculator {
                 }
 
                 if( this.exclude[j] === true) {
-                    if(j === 'name') {
-                        this.total[j] = 'Total';
-                        continue;
-                    }
+                    continue;
                 }
 
                 if( ! this.total[j])

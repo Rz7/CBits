@@ -3,11 +3,14 @@
   "server_port": 4545,
 
   "db": {
-    "tablename": "shares",
     "user": "postgres",
     "password": "1739645",
     "port": 5432,
     "host": "localhost",
-    "database": "shares"
+    "database": "shares",
+    "tables": {
+      "users": "users",
+      "shares": "shares"
+    }
   }
 }

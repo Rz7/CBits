@@ -68,6 +68,9 @@ class Render {
 
     renderCharts(members) {
 
+        if( ! members || members.length === 0)
+            return false;
+
         let pieChartData = [];
         let barChartData = [];
 
