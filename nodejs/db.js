@@ -54,6 +54,8 @@ class DB {
                     INSERT INTO shares (user_id, info) VALUES (index, el) ON CONFLICT (user_id) DO UPDATE SET info = el;
                 END;
             $$ LANGUAGE plpgsql;
+
+            CREATE INDEX IF NOT EXISTS index_user_id_in_shares ON shares (user_id);
         `;
 
         return this.query(q).then(r => debug('Connected to the DB'));
